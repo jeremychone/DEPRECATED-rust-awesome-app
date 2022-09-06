@@ -3,6 +3,7 @@ use std::path::{Path, PathBuf};
 
 use crate::exec::{exec_cmd_args, exec_to_stdout, prompt};
 use crate::prelude::*;
+use crate::utils::{path_joins, safer_remove_dir_all};
 use crate::Error;
 use aho_corasick::AhoCorasick;
 use clap::ArgMatches;
@@ -13,6 +14,7 @@ const DEFAULT_WIN_TITLE: &str = "Awesome App";
 const FILE_PACKAGE: &str = "package.json";
 const FILE_TAURI_CONF: &str = "src-tauri/tauri.conf.json";
 const FILE_VAPP: &str = "src-ui/src/views/v-app.ts";
+const GIT_DIR: &str = ".git";
 
 const GIT_TMPL_BASE: &'static str = "https://github.com/jeremychone/rust-awesome-app-template-base.git";
 
@@ -50,6 +52,11 @@ pub fn run_new(sub_cmd: &ArgMatches) -> Result<()> {
 		},
 	)?;
 
+	// remove the git folder
+	let git_dir = app_dir.join(GIT_DIR);
+	println!("Delete template git directory ({})", git_dir.to_string_lossy());
+	safer_remove_dir_all(&git_dir)?;
+
 	Ok(())
 }
 
@@ -79,16 +86,6 @@ fn replace_parts(dir: &Path, conf: Conf) -> Result<()> {
 }
 
 // region:    --- Utils
-
-/// Will split the sub_path by '/' and push then to a new root PathBuf
-fn path_joins(root: &Path, sub_path: &str) -> PathBuf {
-	let parts = sub_path.split('/');
-	let mut path = root.to_owned();
-	for part in parts {
-		path.push(part)
-	}
-	path
-}
 
 fn check_git() -> Result<()> {
 	exec_to_stdout(None, "git", &["--version"], false).or_else(|ex| Err(Error::GitNotPresent))?;

@@ -11,6 +11,7 @@ mod error;
 mod exec;
 mod prelude;
 mod run_new;
+mod utils;
 
 fn main() {
 	match cmd_run() {

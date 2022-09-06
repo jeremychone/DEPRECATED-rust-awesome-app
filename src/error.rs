@@ -8,6 +8,9 @@ pub enum Error {
 	#[error("Some error: {0}")]
 	Invalid(String),
 
+	#[error("Path not safe to delete {0}")]
+	PathNotSafeToDelete(String),
+
 	#[error("Directory {0} already exist. Cancelling.")]
 	DirAlreadyExist(String),
 
