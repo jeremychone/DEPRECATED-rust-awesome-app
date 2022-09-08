@@ -17,6 +17,7 @@ const FILE_VAPP: &str = "src-ui/src/views/v-app.ts";
 const GIT_DIR: &str = ".git";
 
 const GIT_TMPL_BASE: &'static str = "https://github.com/jeremychone/rust-awesome-app-template-base.git";
+const GIT_TMPL_MIN: &'static str = "https://github.com/jeremychone/rust-awesome-app-template-min.git";
 
 struct Conf<'a> {
 	app_name: &'a str,
@@ -41,7 +42,8 @@ pub fn run_new(sub_cmd: &ArgMatches) -> Result<()> {
 	}
 
 	// do the git clone
-	let res = exec_cmd_args(None, "git", &["clone", GIT_TMPL_BASE, &app_name], false)?;
+	println!("Cloning awesome-app-template-min (minimalistic app)");
+	let res = exec_cmd_args(None, "git", &["clone", GIT_TMPL_MIN, &app_name], false)?;
 
 	// replace the parts now
 	replace_parts(
